@@ -1,3 +1,8 @@
+"""
+A classic (not left-leaning) Red-Black Tree implementation, supporting addition and deletion.
+"""
+
+# The possible Node colors
 BLACK = 'BLACK'
 RED = 'RED'
 NIL = 'NIL'
@@ -45,6 +50,7 @@ class Node:
 
 
 class RedBlackTree:
+    # every node has null nodes as children initially, create one such object for easy management
     NIL_LEAF = Node(value=None, color=NIL, parent=None)
 
     def __init__(self):
