@@ -107,6 +107,58 @@ class RedBlackTree:
         """ Returns a boolean indicating if the given value is present in the tree """
         return bool(self.find_node(value))
 
+    def ceil(self, value) -> int or None:
+        """
+        Given a value, return the closest value that is equal or bigger than it,
+        returning None when no such exists
+        """
+        if self.root is None: return None
+        last_found_val = None if self.root.value < value else self.root.value
+
+        def find_ceil(node):
+            nonlocal last_found_val
+            if node == self.NIL_LEAF:
+                return None
+            if node.value == value:
+                last_found_val = node.value
+                return node.value
+            elif node.value < value:
+                # go right
+                return find_ceil(node.right)
+            else:
+                # this node is bigger, save its value and go left
+                last_found_val = node.value
+
+                return find_ceil(node.left)
+        find_ceil(self.root)
+        return last_found_val
+
+    def floor(self, value) -> int or None:
+        """
+        Given a value, return the closest value that is equal or less than it,
+        returning None when no such exists
+        """
+        if self.root is None: return None
+        last_found_val = None if self.root.value < value else self.root.value
+
+        def find_floor(node):
+            nonlocal last_found_val
+            if node == self.NIL_LEAF:
+                return None
+            if node.value == value:
+                last_found_val = node.value
+                return node.value
+            elif node.value < value:
+                # this node is smaller, save its value and go right, trying to find a cloer one
+                last_found_val = node.value
+
+                return find_floor(node.right)
+            else:
+                return find_floor(node.left)
+
+        find_floor(self.root)
+        return last_found_val
+
     def _remove(self, node):
         """
         Receives a node with 0 or 1 children (typically some sort of successor)

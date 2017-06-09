@@ -2094,6 +2094,64 @@ class RbTreeTests(unittest.TestCase):
             self.assertEqual(rb_tree.count, 99-i)
         self.assertIsNone(rb_tree.root)
 
+    # ***************TEST DELETIONS***************
+
+    # ***************MISC TESTS***************
+
+    def test_ceil(self):
+        # add all the numbers 0-99 step 2
+        # i.e 0, 2, 4
+        rb_tree = RedBlackTree()
+        for i in range(0, 100, 2):
+            rb_tree.add(i)
+        # then search for the ceilings, knowing theyre 1 up
+        for i in range(1, 99, 2):
+            self.assertEqual(rb_tree.ceil(i), i+1)
+
+    def test_ceil_same_value(self):
+        rb_tree = RedBlackTree()
+
+        rb_tree.add(10)
+        rb_tree.add(15)
+        rb_tree.add(20)
+        rb_tree.add(17)
+
+        for i in range(11):
+            self.assertEqual(rb_tree.ceil(i), 10)
+        for i in range(11, 16):
+            self.assertEqual(rb_tree.ceil(i), 15)
+        for i in range(16, 18):
+            self.assertEqual(rb_tree.ceil(i), 17)
+        for i in range(18, 21):
+            self.assertEqual(rb_tree.ceil(i), 20)
+
+    def test_floor(self):
+        # add all the numbers 0-99 step 2
+        # i.e 0, 2, 4
+        rb_tree = RedBlackTree()
+        for i in range(0, 100, 2):
+            rb_tree.add(i)
+        # then search for the ceilings, knowing theyre 1 up
+        for i in range(1, 99, 2):
+            self.assertEqual(rb_tree.floor(i), i - 1)
+
+    def test_floor_same_value(self):
+        rb_tree = RedBlackTree()
+
+        rb_tree.add(10)
+        rb_tree.add(15)
+        rb_tree.add(20)
+        rb_tree.add(17)
+
+        for i in range(11, 15):
+            self.assertEqual(rb_tree.floor(i), 10)
+        for i in range(15, 17):
+            self.assertEqual(rb_tree.floor(i), 15)
+        for i in range(17, 20):
+            self.assertEqual(rb_tree.floor(i), 17)
+        for i in range(20, 50):
+            self.assertEqual(rb_tree.floor(i), 20)
+
 
 # These tests take the bulk of the time for testing.
 class RbTreePerformanceTests(unittest.TestCase):
