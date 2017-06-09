@@ -1,9 +1,8 @@
 import unittest
+import random
+from datetime import datetime
 
-from homework.red_black_tree.rb_tree import RedBlackTree, Node
-BLACK = 'BLACK'
-RED = 'RED'
-NIL = 'NIL'
+from rb_tree import RedBlackTree, Node, BLACK, RED, NIL
 NIL_LEAF = RedBlackTree.NIL_LEAF
 
 
@@ -523,7 +522,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_4.value, 4)
         self.assertEqual(node_4.color, RED)
 
-    def test_build_tree(self):
+    def test_functional_test_build_tree(self):
         rb_tree = RedBlackTree()
         rb_tree.add(2)
         self.assertEqual(rb_tree.root.value, 2)
@@ -1377,7 +1376,7 @@ class RbTreeTests(unittest.TestCase):
 
     def test_deletion_black_node_no_successor_case_3_then_1(self):
         """
-        Delete a node such that case 3 is called, which pushesh
+        Delete a node such that case 3 is called, which pushes
         the double black node upwards into a case 1 problem
         """
         rb_tree = RedBlackTree()
@@ -2094,6 +2093,60 @@ class RbTreeTests(unittest.TestCase):
             self.assertFalse(rb_tree.contains(i))
             self.assertEqual(rb_tree.count, 99-i)
         self.assertIsNone(rb_tree.root)
+
+
+# These tests take the bulk of the time for testing.
+class RbTreePerformanceTests(unittest.TestCase):
+    def test_addition_performance(self):
+        """
+        Add 25,000 elements to the tree
+        """
+        possible_values = list(range(-100000, 100000))
+        elements = [random.choice(possible_values) for _ in range(25000)]
+        start_time = datetime.now()
+        tree = RedBlackTree()
+        for el in elements:
+            tree.add(el)
+        time_taken = datetime.now()-start_time
+        self.assertTrue(time_taken.seconds < 1)
+
+    def test_deletion_performance(self):
+        """
+        Delete 25,000 elements from the tree
+        """
+        possible_values = list(range(-100000, 100000))
+        elements = set([random.choice(possible_values) for _ in range(25000)])
+        # fill up the tree
+        tree = RedBlackTree()
+        for el in elements:
+            tree.add(el)
+        start_time = datetime.now()
+        for el in elements:
+            tree.remove(el)
+        time_taken = datetime.now()-start_time
+        self.assertTrue(time_taken.seconds < 1)
+
+    def test_deletion_and_addition_performance(self):
+        possible_values = list(range(-500000, 500000))
+        elements = list(set([random.choice(possible_values) for _ in range(25000)]))
+        first_part = elements[:len(elements)//2]
+        second_part = elements[len(elements)//2:]
+        deletion_part = first_part[len(first_part)//3:(len(first_part)//3)*2]
+        tree = RedBlackTree()
+        start_time = datetime.now()
+
+        # fill up the tree 1/2
+        for el in first_part:
+            tree.add(el)
+        # delete 1/2 of the tree
+        for del_el in deletion_part:
+            tree.remove(del_el)
+        for el in second_part:
+            tree.add(el)
+
+        time_taken = datetime.now()-start_time
+        self.assertTrue(time_taken.seconds < 1)
+
 
 if __name__ == '__main__':
     unittest.main()
