@@ -139,7 +139,7 @@ class RedBlackTree:
         returning None when no such exists
         """
         if self.root is None: return None
-        last_found_val = None if self.root.value < value else self.root.value
+        last_found_val = None if self.root.value > value else self.root.value
 
         def find_floor(node):
             nonlocal last_found_val
